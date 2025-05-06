@@ -1,11 +1,15 @@
 package com.connect.UserService.impl;
 
+import com.connect.UserService.model.Rating;
 import com.connect.UserService.model.User;
 import com.connect.UserService.repositories.UserRepository;
 import com.connect.UserService.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -15,6 +19,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private RestTemplate restTemplate;
 
 
     @Override
@@ -29,6 +37,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(Integer userId) {
-        return userRepository.findById(userId).orElseThrow(()-> new RuntimeException("Error occurred"));
+        User user =  userRepository.findById(userId).orElseThrow(()-> new RuntimeException("Error occurred"));
+
+        String url = "http://localhost:8081/rating/userid/"+userId; // Example API
+        ArrayList<Rating> ratings = restTemplate.getForObject(url, ArrayList.class);
+        user.setRatingList(ratings);
+        return user;
+
+
     }
 }
