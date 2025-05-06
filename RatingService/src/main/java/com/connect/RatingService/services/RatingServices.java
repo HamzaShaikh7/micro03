@@ -17,12 +17,12 @@ public class RatingServices
     private RatingRepository ratingRepository;
 
 
-    public List<Rating> getAllHotels() {
+    public List<Rating> getAllRating() {
         return ratingRepository.findAll();
     }
 
 
-    public void addHotel(Rating rating){
+    public void addRating(Rating rating){
         ratingRepository.save(rating);
     }
 
@@ -38,10 +38,8 @@ public class RatingServices
 
 
 
-    public Rating getByUserId(String id){
+    public List<Rating> getByUserId(String id){
         return ratingRepository.findByUserId(id);
     }
-
-
 
 }
