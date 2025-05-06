@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     public User getUser(Integer userId) {
         User user =  userRepository.findById(userId).orElseThrow(()-> new RuntimeException("Error occurred"));
 
-        String url = "http://localhost:8081/rating/userid/"+userId; // Example API
+        String url = "http://RATING-SERVICE/rating/userid/"+userId; // Example API
         ArrayList<Rating> ratings = restTemplate.getForObject(url, ArrayList.class);
         user.setRatingList(ratings);
         return user;
