@@ -1,5 +1,6 @@
 package com.connect.UserService.impl;
 
+import com.connect.UserService.config.ClientConfig;
 import com.connect.UserService.model.Rating;
 import com.connect.UserService.model.User;
 import com.connect.UserService.repositories.UserRepository;
@@ -25,6 +26,10 @@ public class UserServiceImpl implements UserService {
     private RestTemplate restTemplate;
 
 
+    @Autowired
+    private ClientConfig clientConfig;
+
+
     @Override
     public User saveUser(User user) {
         return userRepository.save(user);
@@ -39,9 +44,14 @@ public class UserServiceImpl implements UserService {
     public User getUser(Integer userId) {
         User user =  userRepository.findById(userId).orElseThrow(()-> new RuntimeException("Error occurred"));
 
-        String url = "http://RATING-SERVICE/rating/userid/"+userId; // Example API
-        ArrayList<Rating> ratings = restTemplate.getForObject(url, ArrayList.class);
+//        This is for RestTemplate
+//        String url = "http://RATING-SERVICE/rating/userid/"+userId; // Example API
+//        ArrayList<Rating> ratings = restTemplate.getForObject(url, ArrayList.class);
+
+        List<Rating> ratings = clientConfig.getRatingByUser(userId);
+
         user.setRatingList(ratings);
+
         return user;
 
 
